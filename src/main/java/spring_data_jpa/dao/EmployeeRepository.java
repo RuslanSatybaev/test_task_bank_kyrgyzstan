@@ -7,5 +7,5 @@ import spring_data_jpa.entity.Employee;
 import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
-    public List<Employee> findAllByName(String name);
+    public List<Employee> findAllByAccount(String supplier_id);
 }

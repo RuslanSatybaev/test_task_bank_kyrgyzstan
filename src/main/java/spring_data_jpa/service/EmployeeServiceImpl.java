@@ -1,6 +1,5 @@
 package spring_data_jpa.service;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import spring_data_jpa.dao.EmployeeRepository;
@@ -40,8 +39,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findAllByName(String name) {
-        return employeeRepository.findAllByName(name);
+    public List<Employee> findAllByAccount(String supplier_id) {
+        return employeeRepository.findAllByAccount(supplier_id);
     }
 }
 
