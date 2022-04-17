@@ -1,12 +1,11 @@
-package example;
+package spring_data_jpa.entity;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 @XmlRootElement(name = "response")
 
-public class House {
+public class Response {
     @XmlAttribute(name="id")
     public int id;
 
@@ -17,6 +16,6 @@ public class House {
     public String status;
     public String message;
 
-    public House() {
+    public Response() {
     }
 }
