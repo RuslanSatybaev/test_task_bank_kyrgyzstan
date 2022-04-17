@@ -1,16 +1,23 @@
 package spring_data_jpa.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import spring_data_jpa.entity.DBLogXML;
 import spring_data_jpa.entity.Employee;
+import spring_data_jpa.service.DBLogService;
 import spring_data_jpa.service.EmployeeService;
+import spring_data_jpa.xml.DBLogsConvertToXML;
 
+import javax.xml.bind.JAXBException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class MyRestController {
+
+    @Autowired
+    DBLogService dbLogService;
+
     @Autowired
     private EmployeeService employeeService;
 
@@ -25,9 +32,17 @@ public class MyRestController {
     }
 
     @PostMapping("/employees")
-    public Employee addNewEmployee(@RequestBody Employee employee) {
+    public @ResponseBody
+    String getAllDBLogsXML(@RequestBody Employee employee) {
         employeeService.saveEmployee(employee);
-        return employee;
+        DBLogsConvertToXML dbLogsConvertToXML = new DBLogsConvertToXML();
+        try {
+            return dbLogsConvertToXML.convertToXMLString();
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 
     @PutMapping("/employees")
@@ -42,8 +57,19 @@ public class MyRestController {
         return "Employee with ID = " + id + " was deleted";
     }
 
-//    @GetMapping("/employees/name/{supplier_id}")
-//    public List<Employee> showAllEmployeesByName(@PathVariable String supplier_id) {
-//        return employeeService.findAllByName(supplier_id);
-//    }
+    @RequestMapping(value = "/rest/getAllDBLogsXML", method = RequestMethod.GET, produces = "application/xml")
+    public @ResponseBody
+    DBLogsConvertToXML getAllDBLogsXML() {
+        List<DBLogXML> dbLogsList = null;
+        try {
+            dbLogsList = dbLogService.queryAllDBLogsXML();  //JPA (Hibernate)
+//            dbLogsList = dbLogService.queryAllDBLogsJDBCExampleXML(); //JDBC
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(dbLogsList);
+        DBLogsConvertToXML dbLogsConvertToXML = new DBLogsConvertToXML();
+        dbLogsConvertToXML.setLogList(dbLogsList);
+        return dbLogsConvertToXML;
+    }
 }
