@@ -34,10 +34,11 @@ public class MyRestController {
     @PostMapping("/employees")
     public @ResponseBody
     String getAllDBLogsXML(@RequestBody Employee employee) {
+        employee.getDate();
         employeeService.saveEmployee(employee);
         DBLogsConvertToXML dbLogsConvertToXML = new DBLogsConvertToXML();
         try {
-            return dbLogsConvertToXML.convertToXMLString();
+            return dbLogsConvertToXML.convertToXMLString(employee);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
